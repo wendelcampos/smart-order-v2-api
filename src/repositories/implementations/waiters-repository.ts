@@ -2,7 +2,6 @@ import { WaitersDTO } from "@/interfaces/WaitersDTO";
 import { Waiter } from "@prisma/client";
 import { IWaitersRepository } from "../IWaitersRepository";
 import { prisma } from "@/database/prisma";
-
 class WaitersRepository implements IWaitersRepository {
   async save({ name, telephone }: WaitersDTO): Promise<void> {
     await prisma.waiter.create({
@@ -23,7 +22,7 @@ class WaitersRepository implements IWaitersRepository {
       }
     })
   }
-  async index(): Promise<Waiter[] | null> {
+  async index(): Promise<Waiter[]> {
     const waiters = await prisma.waiter.findMany()
 
     return waiters
