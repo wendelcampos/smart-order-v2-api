@@ -1,10 +1,10 @@
-# 🍽️ Restaurante Pedrão - API Backend
+# 🍽️ Smart Order - API Backend
 
 > **API de Gerenciamento de Pedidos** - Projeto Integrador 2 - UNIVESP
 
 ## 📋 Sobre o Projeto
 
-Esta é uma API REST desenvolvida para o **Projeto Integrador 2** da **Universidade Virtual do Estado de São Paulo (UNIVESP)**. O projeto representa a **reestruturação, refatoração e evolução** do sistema **Smart Order**, agora focado no gerenciamento completo de pedidos para o Restaurante Pedrão.
+Esta é uma API REST desenvolvida para o **Projeto Integrador 2** da **Universidade Virtual do Estado de São Paulo (UNIVESP)**. O projeto representa a **reestruturação, refatoração e evolução** do sistema **Smart Order**, agora focado no gerenciamento completo de pedidos para Restaurantes.
 
 ### 🎯 Objetivos Acadêmicos
 - Implementar conceitos avançados de desenvolvimento de software
