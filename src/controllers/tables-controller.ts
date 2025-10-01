@@ -49,6 +49,8 @@ class TablesController {
     const id = z.string().uuid({ message: "ID fornecido é inválido"}).parse(request.params.id)
 
     await this.tablesLogic.remove(id)
+
+    response.json()
   }
 }
 
