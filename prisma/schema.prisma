@@ -143,9 +143,6 @@ model Table {
 
   orders Order[]
 
-  openedAt DateTime @default(now()) @map("opened_at")
-  closedAt DateTime
-
   @@map("tables")
 }
 
