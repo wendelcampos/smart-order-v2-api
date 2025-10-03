@@ -67,7 +67,7 @@ model Order {
   tableId    String   @map("table_id")
   table      Table    @relation(fields: [tableId], references: [id])
 
-  orderItems         orderItems[]
+  orderItems         OrderItems[]
   Payment            Payment?
   SatisfactionSurvey SatisfactionSurvey?
 
@@ -79,7 +79,7 @@ model Order {
   @@map("orders")
 }
 
-model orderItems {
+model OrderItems {
   id       String @id @default(uuid())
   quantity Int
 
@@ -101,7 +101,7 @@ model Product {
   price       Decimal
   category    Category
 
-  orderItens orderItems[]
+  orderItens OrderItems[]
 
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
@@ -160,11 +160,14 @@ model Payment {
 }
 
 model SatisfactionSurvey {
-  id   String @id @default(uuid())
-  note String
+  id     String                   @id @default(uuid())
+  note   Int
+  status StatusSatisfactionSurvey
 
   orderId String @unique @map("order_id")
   order   Order  @relation(fields: [orderId], references: [id])
 
   createdAt DateTime @default(now()) @map("created_at")
+
+  @@map("satisfactions_survey")
 }
