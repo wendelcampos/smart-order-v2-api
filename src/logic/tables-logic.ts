@@ -1,5 +1,6 @@
 import { TablesDTO } from "@/interfaces/TablesDTO";
 import { TablesRepository } from "@/repositories/implementations/tables-repository";
+import { AppError } from "@/utils/AppError";
 
 class TablesLogic {
   private tablesRepository: TablesRepository
@@ -22,6 +23,10 @@ class TablesLogic {
   
   async index() {
     const tables = await this.tablesRepository.index()
+
+    if(!tables) {
+      throw new AppError("Nenhuma mesa encontrada!")
+    }
 
     return tables
   }
