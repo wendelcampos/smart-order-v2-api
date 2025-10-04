@@ -48,6 +48,14 @@ class OrdersItensController {
 
     response.json()
   }
+
+  getProductsByOrderId = async (request: Request, response: Response) => {
+    const orderId = z.string().uuid({ message: "Order ID fornecido é inválido"}).parse(request.params.orderId)
+
+    const orderItems = await this.ordersItensLogic.findProductsByOrderId(orderId)
+
+    response.json(orderItems)
+  }
 }
 
 export { OrdersItensController }
