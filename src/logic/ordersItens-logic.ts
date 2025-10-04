@@ -40,6 +40,16 @@ class OrdersItensLogic {
   async remove(id: string) {
     await this.ordersItensRepository.remove(id)
   }
+
+  async findProductsByOrderId(orderId: string) {
+    const orderItems = await this.ordersItensRepository.findByOrderId(orderId)
+
+    if(!orderItems.length) {
+      throw new AppError("Nenhum produto encontrado para este pedido")
+    }
+    
+    return orderItems
+  }
 }
 
 export { OrdersItensLogic }
