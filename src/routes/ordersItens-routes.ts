@@ -10,6 +10,7 @@ ordersItensRoutes.use(ensureAuthenticated, verifyUserAuthorization(["user"]))
 
 ordersItensRoutes.post("/", ordersItensController.create)
 ordersItensRoutes.get("/", ordersItensController.index)
+ordersItensRoutes.get("/order/:orderId/products", ordersItensController.getProductsByOrderId)
 ordersItensRoutes.get("/:id", ordersItensController.show)
 ordersItensRoutes.delete("/:id", ordersItensController.remove)
 
