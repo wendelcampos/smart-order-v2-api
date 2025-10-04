@@ -6,4 +6,5 @@ export interface IOrdersItensRepository {
   index(): Promise<OrderItems[]>
   show(id: string): Promise<OrderItems | null>
   remove(id: string): Promise<void>
+  findByOrderId(orderId: string): Promise<OrderItems[]>
 }
