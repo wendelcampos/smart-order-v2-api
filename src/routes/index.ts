@@ -8,6 +8,7 @@ import { waitersRoutes } from "./waiters-routes";
 import { tablesRoutes } from "./tables-routes";
 import { ordersRoutes } from "./orders-routes";
 import { ordersItensRoutes } from "./ordersItens-routes";
+import { paymentsRoutes } from "./payments-routes";
 
 const router = Router()
 
@@ -19,5 +20,6 @@ router.use("/waiters", waitersRoutes)
 router.use("/tables", tablesRoutes)
 router.use("/orders", ordersRoutes)
 router.use("/ordersItens", ordersItensRoutes)
+router.use("/payments", paymentsRoutes)
 
 export { router }
