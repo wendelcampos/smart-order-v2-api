@@ -243,6 +243,7 @@ docker-compose up -d
 ### 🛒 Itens do Pedido
 - `POST /ordersItens` - Adicionar item ao pedido
 - `GET /ordersItens` - Listar itens de pedidos
+- `GET /ordersItens/order/:orderId/products` - **Buscar produtos de um pedido específico**
 - `GET /ordersItens/:id` - Buscar item por ID
 - `DELETE /ordersItens/:id` - Remover item do pedido
 
@@ -253,8 +254,10 @@ O sistema inclui um módulo completo de pagamentos com suporte a múltiplos mét
 
 - **Registro Automático**: Pagamentos são vinculados automaticamente aos pedidos
 - **Múltiplos Métodos**: Dinheiro, cartão de crédito, débito e PIX
-- **Controle de Valores**: Cálculo automático de totais
+- **Controle de Valores**: Cálculo automático de totais com formatação decimal
 - **Histórico Completo**: Rastreamento de todas as transações
+- **Resumo Detalhado**: Retorna produtos, quantidades, subtotais e total geral
+- **Validação de Satisfação**: Requer pesquisa de satisfação para finalizar pagamento
 
 ### 📊 Pesquisa de Satisfação
 Sistema integrado de avaliação da experiência do cliente:
@@ -335,6 +338,64 @@ curl -X POST http://localhost:3333/ordersItens \
   }'
 ```
 
+### 🛍️ Buscar Produtos de um Pedido
+```bash
+# Buscar todos os produtos de um pedido específico
+curl -X GET http://localhost:3333/ordersItens/order/uuid-do-pedido/products \
+  -H "Authorization: Bearer <token>"
+```
+
+**Resposta esperada:**
+```json
+[
+  {
+    "id": "item-uuid-1",
+    "orderId": "uuid-do-pedido",
+    "productId": "product-uuid-1",
+    "quantity": 2,
+    "product": {
+      "id": "product-uuid-1",
+      "name": "Hambúrguer Clássico",
+      "price": 25.90,
+      "description": "Hambúrguer com carne, queijo, alface e tomate"
+    }
+  }
+]
+```
+
+### 💰 Resumo de Pagamento
+```bash
+# Obter resumo detalhado do pedido para pagamento
+curl -X GET http://localhost:3333/payments/order/uuid-do-pedido \
+  -H "Authorization: Bearer <token>"
+```
+
+**Resposta esperada:**
+```json
+{
+  "orderId": "uuid-do-pedido",
+  "total": 66.69,
+  "totalItems": 3,
+  "createdAt": "2024-01-15T10:30:00.000Z",
+  "items": [
+    {
+      "productId": "product-uuid-1",
+      "productName": "Hambúrguer Clássico",
+      "price": 25.90,
+      "quantity": 2,
+      "subtotal": 51.80
+    },
+    {
+      "productId": "product-uuid-2",
+      "productName": "Batata Frita",
+      "price": 14.89,
+      "quantity": 1,
+      "subtotal": 14.89
+    }
+  ]
+}
+```
+
 ### 🍽️ Gerenciar Mesa
 ```bash
 # Atualizar status da mesa
@@ -366,18 +427,24 @@ Este projeto é desenvolvido como parte do **Projeto Integrador 2** da **UNIVESP
 - Controle de status em tempo real
 - Vinculação automática com clientes, garçons e mesas
 - Histórico completo de transações
+- **Nova**: Busca de produtos por pedido específico (`GET /ordersItens/order/:orderId/products`)
 
-#### 💳 **Sistema de Pagamentos**
+#### 💳 **Sistema de Pagamentos Avançado**
 - Múltiplos métodos de pagamento
 - Integração com pedidos
 - Controle de valores e datas
 - Relatórios financeiros
+- **Nova**: Resumo detalhado de pagamento com produtos e subtotais
+- **Nova**: Cálculo automático com formatação decimal (ex: 66.69)
+- **Nova**: Contagem total de itens no pedido
+- **Nova**: Validação obrigatória de pesquisa de satisfação
 
 #### 📈 **Pesquisa de Satisfação**
 - Avaliação automática pós-pedido
 - Escala de satisfação intuitiva
 - Relatórios de qualidade
 - Análise de tendências
+- **Integração**: Obrigatória para finalizar pagamentos
 
 #### 🔐 **Segurança Avançada**
 - Autenticação JWT
@@ -390,6 +457,7 @@ Este projeto é desenvolvido como parte do **Projeto Integrador 2** da **UNIVESP
 - Relacionamentos complexos
 - Migrações versionadas
 - Type-safety completo
+- **Nova**: Tipos personalizados para resolver problemas de tipagem (Decimal vs Number)
 
 ## 👨‍💻 Desenvolvedores
 
