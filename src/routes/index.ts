@@ -9,6 +9,7 @@ import { tablesRoutes } from "./tables-routes";
 import { ordersRoutes } from "./orders-routes";
 import { ordersItensRoutes } from "./ordersItens-routes";
 import { paymentsRoutes } from "./payments-routes";
+import { satisfactionSurveyRoutes } from "./satisfactionSurvey-routes";
 
 const router = Router()
 
@@ -21,5 +22,6 @@ router.use("/tables", tablesRoutes)
 router.use("/orders", ordersRoutes)
 router.use("/ordersItens", ordersItensRoutes)
 router.use("/payments", paymentsRoutes)
+router.use("/satisfaction-survey", satisfactionSurveyRoutes)
 
 export { router }
