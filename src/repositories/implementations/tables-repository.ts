@@ -34,6 +34,17 @@ class TablesRepository implements ITablesRepository {
     })
   }
 
+  async updateStatusTable(id: string, status: 'open' | 'closed'): Promise<void> {
+    await prisma.table.update({
+      where: {
+        id
+      },
+      data: {
+        status
+      }
+    })
+  }
+
 }
 
 export { TablesRepository }

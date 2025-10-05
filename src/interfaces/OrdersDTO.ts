@@ -5,7 +5,7 @@ export interface OrdersRequestDTO {
 }
 
 export interface OrdersDTO {
-  waiterID: string
-  customerID: string
-  tableID: string
+  waiterId: string
+  customerId: string
+  tableId: string
 }

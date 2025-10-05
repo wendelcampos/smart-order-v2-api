@@ -28,9 +28,9 @@ class OrdersLogic {
     }
 
     await this.ordersRepository.save({
-      customerID: customer?.id,
-      tableID: table.id,
-      waiterID: waiter.id
+      customerId: customer?.id,
+      tableId: table.id,
+      waiterId: waiter.id
     })
   }
 

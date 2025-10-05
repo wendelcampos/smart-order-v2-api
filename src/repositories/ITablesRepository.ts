@@ -6,4 +6,5 @@ export interface ITablesRepository {
   update({ tableNumber }: TablesDTO, id: string): Promise<void>
   index(): Promise<Table[]>
   remove(id: string): Promise<void>
+  updateStatusTable(id: string, status: 'open' | 'closed'): Promise<void>
 }

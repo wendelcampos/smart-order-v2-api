@@ -1,6 +1,8 @@
 import { PaymentsDTO } from "@/interfaces/PaymentsDTO"
 import { OrdersItensRepository } from "@/repositories/implementations/ordersItens-repository"
 import { PaymentsRepository } from "@/repositories/implementations/payments-repository"
+import { OrdersRepository } from "@/repositories/implementations/orders-repository"
+import { TablesRepository } from "@/repositories/implementations/tables-repository"
 import { AppError } from "@/utils/AppError"
 import { OrderItems, Product } from "@prisma/client"
 
@@ -11,26 +13,40 @@ type OrderItemsWithProduct = OrderItems & {
 class PaymentsLogic {
   private ordersItensRepository: OrdersItensRepository
   private paymentsRepository: PaymentsRepository
+  private ordersRepository: OrdersRepository
+  private tablesRepository: TablesRepository
 
   constructor() {
     this.ordersItensRepository = new OrdersItensRepository()
     this.paymentsRepository = new PaymentsRepository()
+    this.ordersRepository = new OrdersRepository()
+    this.tablesRepository = new TablesRepository()
   }
 
   async create({ orderId, paymentType, total }: PaymentsDTO) {
     const satisfactionSurvey = await this.paymentsRepository.findSatisfactionSurvey(orderId)
 
-    console.log(satisfactionSurvey)
-
     if(!satisfactionSurvey) {
       throw new AppError("Necessário preencher pesquisa de satisfação para concluir o pagamento")
     }
 
+    // Buscar o pedido para obter o tableId
+    const order = await this.ordersRepository.show(orderId)
+    
+    if(!order) {
+      throw new AppError("Pedido não encontrado")
+    }
+
+    // Salvar o pagamento
     await this.paymentsRepository.save({
       orderId,
       paymentType,
       total
     })
+
+    await this.ordersRepository.updateStatusOrder(orderId, 'closed')
+
+    await this.tablesRepository.updateStatusTable(order.tableId, 'open')
   }
   async getShowPayment(id: string) {
     const itens = await this.ordersItensRepository.findByOrderId(id) as OrderItemsWithProduct[]

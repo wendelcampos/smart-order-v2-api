@@ -4,12 +4,12 @@ import { prisma } from "@/database/prisma";
 import { OrdersDTO } from "@/interfaces/OrdersDTO";
 
 class OrdersRepository implements IOrdersRepository {
-  async save({ customerID, tableID, waiterID }: OrdersDTO): Promise<void> {
+  async save({ customerId, tableId, waiterId }: OrdersDTO): Promise<void> {
     await prisma.order.create({
       data: {
-        tableId: tableID,
-        waiterId: waiterID,
-        customerId: customerID
+        tableId,
+        customerId,
+        waiterId
       }
     })
   }
@@ -63,6 +63,17 @@ class OrdersRepository implements IOrdersRepository {
     })
 
     return waiter
+  }
+
+  async updateStatusOrder(id: string, status: 'open' | 'closed'): Promise<void> {
+    await prisma.order.update({
+      where: {
+        id
+      },
+      data: {
+        status
+      }
+    })
   }
 }
 
