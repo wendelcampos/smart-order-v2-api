@@ -1,4 +1,4 @@
-import { CustomersDTO } from "@/interfaces/CustomersDTO";
+import { CustomersDTO } from "@/dtos/CustomersDTO";
 import { CustomersRepository } from "@/repositories/implementations/customers-repository";
 import { AppError } from "@/utils/AppError";
 

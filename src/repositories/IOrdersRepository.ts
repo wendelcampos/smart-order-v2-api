@@ -1,4 +1,4 @@
-import { OrdersDTO } from "@/interfaces/OrdersDTO";
+import { OrdersDTO } from "@/dtos/OrdersDTO";
 import { Customer, Order, Table, Waiter } from "@prisma/client";
 
 export interface IOrdersRepository {

@@ -1,4 +1,4 @@
-import { WaitersDTO } from "@/interfaces/WaitersDTO";
+import { WaitersDTO } from "@/dtos/WaitersDTO";
 import { Waiter } from "@prisma/client";
 
 export interface IWaitersRepository {

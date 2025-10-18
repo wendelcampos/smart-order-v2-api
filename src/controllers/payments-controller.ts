@@ -10,32 +10,58 @@ class PaymentsController {
   constructor() {
     this.paymentsLogic = new PaymentsLogic()
   }
-  
-  create = async (request: Request, response: Response) => {
+
+  updatePayment = async (request: Request, response: Response) => {
     const bodySchema = z.object({
       orderId: z.string().uuid(),
-      total: z.number(),
-      paymentType: z.enum([MethodsPayments.cash, MethodsPayments.credit_card, MethodsPayments.debit_card, MethodsPayments.pix])
+      paymentType: z.enum([
+        MethodsPayments.cash,
+        MethodsPayments.credit_card,
+        MethodsPayments.debit_card,
+        MethodsPayments.pix,
+      ]),
     })
 
-    const { orderId, paymentType, total } = bodySchema.parse(request.body)
+    console.log(request.body)
 
-    await this.paymentsLogic.create({
+    const { orderId, paymentType } = bodySchema.parse(request.body)
+
+    console.log(orderId, paymentType)
+
+    await this.paymentsLogic.updatePayment({
       orderId,
       paymentType,
-      total
     })
 
     response.status(201).json()
   }
 
+  index = async (request: Request, response: Response) => {
+    const payments = await this.paymentsLogic.index()
+
+    response.json(payments)
+  }
 
   getShowPayment = async (request: Request, response: Response) => {
-    const id = z.string().uuid({ message: "ID fornecido é inválido"}).parse(request.params.id)
+    const id = z
+      .string()
+      .uuid({ message: "ID fornecido é inválido" })
+      .parse(request.params.id)
 
     const payment = await this.paymentsLogic.getShowPayment(id)
 
     response.json(payment)
+  }
+
+  remove = async (request: Request, response: Response) => {
+    const id = z
+      .string()
+      .uuid({ message: "ID fornecido é inválido" })
+      .parse(request.params.id)
+
+    await this.paymentsLogic.remove(id)
+
+    response.json()
   }
 }
 

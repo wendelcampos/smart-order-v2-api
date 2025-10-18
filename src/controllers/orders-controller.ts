@@ -20,7 +20,7 @@ class OrdersController {
 
     const { tableNumber, cpf, waiterName } = bodySchema.parse(request.body)
 
-    this.ordersLogic.create({
+    await this.ordersLogic.create({
       tableNumber,
       cpf,
       waiterName

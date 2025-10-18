@@ -1,4 +1,4 @@
-import { TablesDTO } from "@/interfaces/TablesDTO";
+import { TablesDTO } from "@/dtos/TablesDTO";
 import { TablesRepository } from "@/repositories/implementations/tables-repository";
 import { AppError } from "@/utils/AppError";
 

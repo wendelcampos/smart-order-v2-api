@@ -1,4 +1,4 @@
-import { ProductsDTO } from "@/interfaces/ProductsDTO";
+import { ProductsDTO } from "@/dtos/ProductsDTO";
 import { Product } from "@prisma/client";
 import { IProductsRepository } from "../IProductsRepository";
 import { prisma } from "@/database/prisma";

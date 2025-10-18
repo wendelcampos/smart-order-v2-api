@@ -1,4 +1,4 @@
-import { OrdersItensDTO } from "@/interfaces/OrdersItensDTO";
+import { OrdersItensDTO } from "@/dtos/OrdersItensDTO";
 import { OrderItems } from "@prisma/client";
 import { IOrdersItensRepository } from "../IOrdersItensRepository";
 import { prisma } from "@/database/prisma";
@@ -50,6 +50,26 @@ class OrdersItensRepository implements IOrdersItensRepository {
     })
 
     return orderItems
+  }
+
+  async findOrderById(orderId: string): Promise<any> {
+    const order = await prisma.order.findFirst({
+      where: {
+        id: orderId
+      }
+    })
+
+    return order
+  }
+
+  async findProductById(productId: string): Promise<any> {
+    const product = await prisma.product.findFirst({
+      where: {
+        id: productId
+      }
+    })
+
+    return product
   }
 
 }

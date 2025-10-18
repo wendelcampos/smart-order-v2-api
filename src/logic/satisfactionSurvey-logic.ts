@@ -1,4 +1,4 @@
-import { SatisfactionSurveyDTO } from "@/interfaces/SatisfactionSurveyDTO";
+import { SatisfactionSurveyDTO } from "@/dtos/SatisfactionSurveyDTO";
 import { SatisfactionSurveyRepository } from "@/repositories/implementations/satisfactionSurvey-repository";
 
 class SatisfactionSurveyLogic {

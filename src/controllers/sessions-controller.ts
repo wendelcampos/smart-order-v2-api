@@ -12,15 +12,15 @@ class SessionsController {
 
   create = async (request: Request, response: Response) => {
     const bodySchema = z.object({
-      email: z.string().email({ message: "E-mail invalido"}).toLowerCase(),
+      email: z.string().email({ message: "E-mail invalido" }).toLowerCase(),
       password: z.string().min(6)
     })
 
     const { email, password } = bodySchema.parse(request.body)
 
-    const token = await this.sessionsLogic.create({ email, password })
+    const user = await this.sessionsLogic.create({ email, password })
 
-    response.json(token)
+    response.json(user)
   }
 }
 

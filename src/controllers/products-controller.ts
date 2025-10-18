@@ -16,7 +16,7 @@ class ProductsController {
       name: z.string().min(6),
       description: z.string(),
       price: z.number(),
-      category: z.enum([Category.bebidas, Category.pratos, Category.pratos_do_dia])
+      category: z.enum([Category.bebidas, Category.pratos, Category.pratos_do_dia, Category.lanches])
     })
 
     const { name, description, price, category } = bodySchema.parse(request.body)
@@ -60,7 +60,7 @@ class ProductsController {
       name: z.string().min(6),
       description: z.string(),
       price: z.number(),
-      category: z.enum([Category.bebidas, Category.pratos, Category.pratos_do_dia])
+      category: z.enum([Category.bebidas, Category.pratos, Category.pratos_do_dia, Category.lanches])
     })
 
     const { name, description, price, category } = bodySchema.parse(request.body)

@@ -1,12 +1,19 @@
-import { OrdersRequestDTO } from "@/interfaces/OrdersDTO";
+import { OrdersRequestDTO } from "@/dtos/OrdersDTO";
+import { CustomersRepository } from "@/repositories/implementations/customers-repository";
 import { OrdersRepository } from "@/repositories/implementations/orders-repository";
+import { PaymentsRepository } from "@/repositories/implementations/payments-repository";
+import { TablesRepository } from "@/repositories/implementations/tables-repository";
 import { AppError } from "@/utils/AppError";
 
 class OrdersLogic {
   private ordersRepository: OrdersRepository
+  private paymentsRepository: PaymentsRepository
+  private tablesRepository: TablesRepository
 
   constructor() {
     this.ordersRepository = new OrdersRepository()
+    this.paymentsRepository = new PaymentsRepository()
+    this.tablesRepository = new TablesRepository()
   }
   async create({ tableNumber, cpf, waiterName }: OrdersRequestDTO) {
     const table = await this.ordersRepository.findByTable(tableNumber)
@@ -32,6 +39,16 @@ class OrdersLogic {
       tableId: table.id,
       waiterId: waiter.id
     })
+
+    const order = await this.ordersRepository.findByOrderId(customer.id)
+
+    if (!order) {
+      throw new AppError("Nenhum pedido encontrado!")
+    }
+
+    await this.paymentsRepository.createPaymentOrder(order.id)
+
+    await this.tablesRepository.updateStatusTable(order.tableId, "closed")
   }
 
   async index() {
@@ -55,7 +72,16 @@ class OrdersLogic {
   }
 
   async remove(id: string) {
-    await this.ordersRepository.remove(id)
+    
+    const order = await this.ordersRepository.show(id)
+    
+    if (!order) {
+      throw new AppError("Nenhum pedido encontrado!")
+    }
+
+    await this.tablesRepository.updateStatusTable(order.tableId, "open")
+
+    await this.ordersRepository.remove(id) 
   }
 }
 

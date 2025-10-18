@@ -1,4 +1,4 @@
-import { SatisfactionSurveyDTO } from "@/interfaces/SatisfactionSurveyDTO";
+import { SatisfactionSurveyDTO } from "@/dtos/SatisfactionSurveyDTO";
 import { ISatisfactionSurveyRepository } from "../ISatisfactionSurveyRepository";
 import { prisma } from "@/database/prisma";
 

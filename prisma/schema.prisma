@@ -7,6 +7,124 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model User {
+  id        String   @id @default(uuid())
+  name      String
+  email     String   @unique
+  password  String
+  role      UserRole @default(user)
+  createDat DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("users")
+}
+
+model Order {
+  id                 String              @id @default(uuid())
+  customerId         String              @map("customer_id")
+  waiterId           String              @map("waiter_id")
+  tableId            String              @map("table_id")
+  status             StatusOrder         @default(open)
+  createdAt          DateTime            @default(now()) @map("created_at")
+  updatedAt          DateTime            @updatedAt @map("updated_at")
+  orderItems         OrderItems[]
+  customer           Customer            @relation(fields: [customerId], references: [id])
+  table              Table               @relation(fields: [tableId], references: [id])
+  waiter             Waiter              @relation(fields: [waiterId], references: [id])
+  Payment            Payment?
+  SatisfactionSurvey SatisfactionSurvey?
+
+  @@map("orders")
+}
+
+model OrderItems {
+  id        String   @id @default(uuid())
+  quantity  Int
+  orderId   String   @map("order_id")
+  productId String   @map("product_id")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+  order     Order    @relation(fields: [orderId], references: [id])
+  product   Product  @relation(fields: [productId], references: [id])
+
+  @@map("order_itens")
+}
+
+model Product {
+  id          String       @id @default(uuid())
+  name        String
+  description String
+  price       Decimal
+  category    Category
+  createdAt   DateTime     @default(now()) @map("created_at")
+  updatedAt   DateTime     @updatedAt @map("updated_at")
+  orderItens  OrderItems[]
+
+  @@map("products")
+}
+
+model Customer {
+  id        String   @id @default(uuid())
+  name      String
+  cpf       String
+  telephone String
+  email     String   @unique
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+  orders    Order[]
+
+  @@map("customers")
+}
+
+model Waiter {
+  id         String   @id @default(uuid())
+  name       String
+  telephone  String
+  hiringDate DateTime @default(now()) @map("hiring_date")
+  orders     Order[]
+
+  @@map("waiters")
+}
+
+model Table {
+  id          String      @id @default(uuid())
+  tableNumber String      @map("table_number")
+  status      StatusTable @default(open)
+  orders      Order[]
+
+  @@map("tables")
+}
+
+model Payment {
+  id          String          @id @default(uuid())
+  total       Decimal?
+  orderId     String          @unique @map("order_id")
+  paymentType MethodsPayments? @map("payment_type")
+  paymentDate DateTime?
+  status      StatusPayment   @default(open)
+  createdAt   DateTime @default(now()) @map("created_at")
+
+  order       Order           @relation(fields: [orderId], references: [id])
+
+  @@map("payments")
+}
+
+model SatisfactionSurvey {
+  id        String                   @id @default(uuid())
+  note      Int
+  status    StatusSatisfactionSurvey
+  orderId   String                   @unique @map("order_id")
+  createdAt DateTime                 @default(now()) @map("created_at")
+  order     Order                    @relation(fields: [orderId], references: [id])
+
+  @@map("satisfactions_survey")
+}
+
+enum StatusPayment {
+  open
+  paid
+}
+
 enum UserRole {
   admin
   user
@@ -26,6 +144,7 @@ enum Category {
   bebidas
   pratos
   pratos_do_dia
+  lanches
 }
 
 enum StatusSatisfactionSurvey {
@@ -41,133 +160,4 @@ enum MethodsPayments {
   credit_card
   debit_card
   pix
-}
-
-model User {
-  id       String @id @default(uuid())
-  name     String
-  email    String @unique
-  password String
-
-  role UserRole @default(user)
-
-  createDat DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @updatedAt @map("updated_at")
-
-  @@map("users")
-}
-
-model Order {
-  id String @id @default(uuid())
-
-  customerId String   @map("customer_id")
-  customer   Customer @relation(fields: [customerId], references: [id])
-  waiterId   String   @map("waiter_id")
-  waiter     Waiter   @relation(fields: [waiterId], references: [id])
-  tableId    String   @map("table_id")
-  table      Table    @relation(fields: [tableId], references: [id])
-
-  orderItems         OrderItems[]
-  Payment            Payment?
-  SatisfactionSurvey SatisfactionSurvey?
-
-  status StatusOrder @default(open)
-
-  createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @updatedAt @map("updated_at")
-
-  @@map("orders")
-}
-
-model OrderItems {
-  id       String @id @default(uuid())
-  quantity Int
-
-  orderId   String  @map("order_id")
-  order     Order   @relation(fields: [orderId], references: [id])
-  productId String  @map("product_id")
-  product   Product @relation(fields: [productId], references: [id])
-
-  createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @updatedAt @map("updated_at")
-
-  @@map("order_itens")
-}
-
-model Product {
-  id          String   @id @default(uuid())
-  name        String
-  description String
-  price       Decimal
-  category    Category
-
-  orderItens OrderItems[]
-
-  createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @updatedAt @map("updated_at")
-
-  @@map("products")
-}
-
-model Customer {
-  id        String @id @default(uuid())
-  name      String
-  cpf       String
-  telephone String
-  email     String @unique
-
-  orders Order[]
-
-  createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @updatedAt @map("updated_at")
-
-  @@map("customers")
-}
-
-model Waiter {
-  id        String @id @default(uuid())
-  name      String
-  telephone String
-
-  orders Order[]
-
-  hiringDate DateTime @default(now()) @map("hiring_date")
-
-  @@map("waiters")
-}
-
-model Table {
-  id          String      @id @default(uuid())
-  tableNumber String      @map("table_number")
-  status      StatusTable @default(open)
-
-  orders Order[]
-
-  @@map("tables")
-}
-
-model Payment {
-  id    String  @id @default(uuid())
-  total Decimal
-
-  orderId String @unique @map("order_id")
-  order   Order  @relation(fields: [orderId], references: [id])
-
-  paymentType MethodsPayments @map("payment_type")
-  paymentDate DateTime
-
-  @@map("payments")
-}
-
-model SatisfactionSurvey {
-  id     String                   @id @default(uuid())
-  note   Int
-  status StatusSatisfactionSurvey
-
-  orderId String @unique @map("order_id")
-  order   Order  @relation(fields: [orderId], references: [id])
-
-  createdAt DateTime @default(now()) @map("created_at")
-
-  @@map("satisfactions_survey")
 }

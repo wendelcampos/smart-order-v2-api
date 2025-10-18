@@ -1,4 +1,4 @@
-import { TablesDTO } from "@/interfaces/TablesDTO";
+import { TablesDTO } from "@/dtos/TablesDTO";
 import { Table } from "@prisma/client";
 import { ITablesRepository } from "../ITablesRepository";
 import { prisma } from "@/database/prisma";
@@ -22,7 +22,11 @@ class TablesRepository implements ITablesRepository {
     })
   }
   async index(): Promise<Table[]> {
-    const tables = await prisma.table.findMany()
+    const tables = await prisma.table.findMany({
+      orderBy: {
+        tableNumber: 'asc'
+      }
+    })
 
     return tables
   }

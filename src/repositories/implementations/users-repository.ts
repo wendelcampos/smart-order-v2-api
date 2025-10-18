@@ -1,7 +1,7 @@
 import { User } from "@prisma/client";
 import { IUsersRepository } from "../IUsersRespository";
 import { prisma } from "@/database/prisma";
-import { UsersDTO } from "@/interfaces/UsersDTO";
+import { UsersDTO } from "@/dtos/UsersDTO";
 
 class UsersRepository implements IUsersRepository {
   async findByEmail(email: string): Promise<User | null> {

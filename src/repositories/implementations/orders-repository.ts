@@ -1,7 +1,7 @@
 import { Table, Customer, Waiter, Order } from "@prisma/client";
 import { IOrdersRepository } from "../IOrdersRepository";
 import { prisma } from "@/database/prisma";
-import { OrdersDTO } from "@/interfaces/OrdersDTO";
+import { OrdersDTO } from "@/dtos/OrdersDTO";
 
 class OrdersRepository implements IOrdersRepository {
   async save({ customerId, tableId, waiterId }: OrdersDTO): Promise<void> {
@@ -14,8 +14,14 @@ class OrdersRepository implements IOrdersRepository {
     })
   }
 
-  index(): Promise<Order[]> {
-    const orders = prisma.order.findMany()
+  async index(): Promise<Order[]> {
+    const orders = await prisma.order.findMany({
+      include: {
+        table: true,
+        customer: true,
+        waiter: true,
+      }
+    })
 
     return orders
   }
@@ -63,6 +69,16 @@ class OrdersRepository implements IOrdersRepository {
     })
 
     return waiter
+  }
+
+  async findByOrderId(customerId: string): Promise<Order | null> {
+    const order = await prisma.order.findFirst({
+      where: {
+        customerId
+      }
+    })
+
+    return order
   }
 
   async updateStatusOrder(id: string, status: 'open' | 'closed'): Promise<void> {

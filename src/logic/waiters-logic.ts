@@ -1,4 +1,4 @@
-import { WaitersDTO } from "@/interfaces/WaitersDTO"
+import { WaitersDTO } from "@/dtos/WaitersDTO"
 import { WaitersRepository } from "@/repositories/implementations/waiters-repository"
 import { AppError } from "@/utils/AppError"
 

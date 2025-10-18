@@ -1,4 +1,4 @@
-import { CustomersDTO } from "@/interfaces/CustomersDTO";
+import { CustomersDTO } from "@/dtos/CustomersDTO";
 import { Customer } from "@prisma/client";
 
 export interface ICustomerRepository {

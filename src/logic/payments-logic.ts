@@ -1,4 +1,4 @@
-import { PaymentsDTO } from "@/interfaces/PaymentsDTO"
+import { PaymentsDTO } from "@/dtos/PaymentsDTO"
 import { OrdersItensRepository } from "@/repositories/implementations/ordersItens-repository"
 import { PaymentsRepository } from "@/repositories/implementations/payments-repository"
 import { OrdersRepository } from "@/repositories/implementations/orders-repository"
@@ -23,14 +23,7 @@ class PaymentsLogic {
     this.tablesRepository = new TablesRepository()
   }
 
-  async create({ orderId, paymentType, total }: PaymentsDTO) {
-    const satisfactionSurvey = await this.paymentsRepository.findSatisfactionSurvey(orderId)
-
-    if(!satisfactionSurvey) {
-      throw new AppError("Necessário preencher pesquisa de satisfação para concluir o pagamento")
-    }
-
-    // Buscar o pedido para obter o tableId
+  async updatePayment({ orderId, paymentType }: PaymentsDTO) {
     const order = await this.ordersRepository.show(orderId)
     
     if(!order) {
@@ -38,16 +31,26 @@ class PaymentsLogic {
     }
 
     // Salvar o pagamento
-    await this.paymentsRepository.save({
+    await this.paymentsRepository.updatePayment({
       orderId,
       paymentType,
-      total
     })
 
     await this.ordersRepository.updateStatusOrder(orderId, 'closed')
 
     await this.tablesRepository.updateStatusTable(order.tableId, 'open')
   }
+
+  async index() {
+    const payments = await this.paymentsRepository.index()
+
+    if(!payments.length) {
+      throw new AppError("Nenhum pagamento encontrado!")
+    }
+
+    return payments
+  }
+
   async getShowPayment(id: string) {
     const itens = await this.ordersItensRepository.findByOrderId(id) as OrderItemsWithProduct[]
 
@@ -78,6 +81,10 @@ class PaymentsLogic {
       totalItems: itens.reduce((acc, item) => acc + item.quantity, 0),
       createdAt: itens[0]?.createdAt
     }
+  }
+
+  async remove(id: string) {
+    await this.paymentsRepository.remove(id)
   }
 }
 

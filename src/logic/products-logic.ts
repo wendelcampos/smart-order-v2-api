@@ -1,4 +1,4 @@
-import { ProductsDTO } from "@/interfaces/ProductsDTO";
+import { ProductsDTO } from "@/dtos/ProductsDTO";
 import { ProductsRepository } from "@/repositories/implementations/products-repository";
 import { AppError } from "@/utils/AppError";
 
@@ -16,6 +16,7 @@ class ProductsLogic {
       category
     })
   }
+
   async index() {
     const products = await this.productsRepository.index()
 

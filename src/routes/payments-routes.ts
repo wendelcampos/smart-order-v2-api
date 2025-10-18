@@ -8,7 +8,9 @@ const paymentsController = new PaymentsController()
 
 paymentsRoutes.use(ensureAuthenticated, verifyUserAuthorization(["user"]))
 
-paymentsRoutes.post("/", paymentsController.create)
+paymentsRoutes.post("/", paymentsController.updatePayment)
+paymentsRoutes.get("/", paymentsController.index)
 paymentsRoutes.get("/:id", paymentsController.getShowPayment)
+paymentsRoutes.delete("/:id", paymentsController.remove)
 
 export { paymentsRoutes }

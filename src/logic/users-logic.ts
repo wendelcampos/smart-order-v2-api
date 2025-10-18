@@ -1,4 +1,4 @@
-import { UsersDTO } from "@/interfaces/UsersDTO";
+import { UsersDTO } from "@/dtos/UsersDTO";
 import { UsersRepository } from "@/repositories/implementations/users-repository";
 import { AppError } from "@/utils/AppError";
 import { User } from "@prisma/client";

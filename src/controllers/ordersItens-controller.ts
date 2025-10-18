@@ -11,9 +11,9 @@ class OrdersItensController {
 
   create = async(request: Request, response: Response) => {
     const bodySchema = z.object({
-      orderId: z.string(),
-      productId: z.string(),
-      quantity: z.number(), 
+      orderId: z.string().uuid({ message: "Order ID deve ser um UUID válido" }),
+      productId: z.string().uuid({ message: "Product ID deve ser um UUID válido" }),
+      quantity: z.number().min(1, { message: "Quantidade deve ser maior que 0" }), 
     })
 
     const { orderId, productId, quantity } = bodySchema.parse(request.body)

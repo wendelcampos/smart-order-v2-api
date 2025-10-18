@@ -1,5 +1,5 @@
 import { authConfig } from "@/configs/auth";
-import { SessionsDTO } from "@/interfaces/SessionsDTO";
+import { SessionsDTO } from "@/dtos/SessionsDTO";
 import { UsersRepository } from "@/repositories/implementations/users-repository";
 import { AppError } from "@/utils/AppError";
 
@@ -12,27 +12,29 @@ class SessionsLogic {
   constructor() {
     this.usersRepository = new UsersRepository()
   }
-  async create({ email, password }: SessionsDTO): Promise<{token: string}> {
+  async create({ email, password }: SessionsDTO): Promise<{token: string, user: object}> {
     const user = await this.usersRepository.findByEmail(email)
 
     if(!user) {
-      throw new AppError("E-mail ou password errados", 401)
+      throw new AppError("E-mail ou senha invalidos", 401)
     }
 
     const passwordMatched = await compare(password, user.password) 
 
     if(!passwordMatched) {
-      throw new AppError("E-mail ou password errados", 401)
+      throw new AppError("E-mail ou senha invalidos", 401)
     }
 
     const { expiresIn, secret } = authConfig.jwt
+
+    const { password: _, ...userWithoutPassword } = user
 
     const token = sign({ role: user.role }, secret, {
       subject: user.id,
       expiresIn
     })
 
-    return { token }
+    return { token, user: userWithoutPassword }
   }
 }
 

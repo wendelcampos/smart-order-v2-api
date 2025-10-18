@@ -1,4 +1,4 @@
-import { TablesDTO } from "@/interfaces/TablesDTO";
+import { TablesDTO } from "@/dtos/TablesDTO";
 import { Table } from "@prisma/client";
 
 export interface ITablesRepository {

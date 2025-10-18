@@ -1,4 +1,4 @@
-import { WaitersDTO } from "@/interfaces/WaitersDTO";
+import { WaitersDTO } from "@/dtos/WaitersDTO";
 import { Waiter } from "@prisma/client";
 import { IWaitersRepository } from "../IWaitersRepository";
 import { prisma } from "@/database/prisma";
