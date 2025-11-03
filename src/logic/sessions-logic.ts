@@ -6,13 +6,24 @@ import { AppError } from "@/utils/AppError";
 import { compare } from "bcrypt";
 import { sign } from "jsonwebtoken";
 
+export type SessionsResponse = {
+  token: string;
+  user: {
+    id: string;
+    name: string;
+    email: string;
+    role: string;
+  };
+}
+
 class SessionsLogic {
   private usersRepository: UsersRepository
 
   constructor() {
     this.usersRepository = new UsersRepository()
   }
-  async create({ email, password }: SessionsDTO): Promise<{token: string, user: object}> {
+
+  async create({ email, password }: SessionsDTO): Promise<SessionsResponse> {
     const user = await this.usersRepository.findByEmail(email)
 
     if(!user) {
@@ -32,7 +43,15 @@ class SessionsLogic {
       expiresIn
     })
 
-    return { token, user }
+    return { 
+      token,
+      user: {
+        id: user.id,
+        name: user.name,
+        email: user.email,
+        role: user.role
+      }
+    }
   }
 }
 
