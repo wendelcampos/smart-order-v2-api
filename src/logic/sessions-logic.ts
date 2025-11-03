@@ -27,14 +27,12 @@ class SessionsLogic {
 
     const { expiresIn, secret } = authConfig.jwt
 
-    const { password: _, ...userWithoutPassword } = user
-
     const token = sign({ role: user.role }, secret, {
       subject: user.id,
       expiresIn
     })
 
-    return { token, user: userWithoutPassword }
+    return { token, user }
   }
 }
 

@@ -22,11 +22,7 @@ class PaymentsController {
       ]),
     })
 
-    console.log(request.body)
-
     const { orderId, paymentType } = bodySchema.parse(request.body)
-
-    console.log(orderId, paymentType)
 
     await this.paymentsLogic.updatePayment({
       orderId,
